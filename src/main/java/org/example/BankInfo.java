@@ -1,5 +1,6 @@
 package org.example;
 
+import javax.sql.rowset.serial.SerialStruct;
 import java.util.Stack;
 
 public class BankInfo {
@@ -9,7 +10,7 @@ public class BankInfo {
     private static int Balance;
 
     private static String  Phone;
-    private static int PIN;
+    private static String PIN;
 
     public String getPhone() {
         return Phone;
@@ -18,11 +19,11 @@ public class BankInfo {
     public void setPhone(String  Phone) {
         this.Phone = Phone;
     }
-    public int getPIN() {
+    public String getPIN() {
         return PIN;
     }
 
-    public void setPIN(int PIN) {
+    public void setPIN(String PIN) {
         this.PIN = PIN;
     }
 

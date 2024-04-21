@@ -69,8 +69,15 @@ public class Operation {
                             operation();
                         break;
                     case 5:
-
+                        System.out.println("-----------------------------------------------------------------------------------");
+                        process.changeUPIPin();
+                        System.out.println("-----------------------------------------------------------------------------------");
+                        System.out.println();
+                        System.out.print("Main Page :: Press 1 :: ");
+                        if(sc.nextInt() == 1)
+                            operation();
                         break;
+
                     case 6:
                         System.out.println("-----------------------------------------------------------------------------------");
                         process.checkBalance();
