@@ -82,6 +82,7 @@ public class Process {
             preparedStatement.setInt(5, amount);
             preparedStatement.setString(6, pin);
             preparedStatement.executeUpdate();
+            System.out.println("******* Thanks for creating account ******");
             System.out.println("Your Account has been Created Successfully");
             System.out.println("************************************ Your Account Details ***************************************");
             System.out.println();
@@ -118,14 +119,18 @@ public class Process {
 
         System.out.print("Enter your Account Number ");
         String acc_Number = sc.next();
-        System.out.print("Enter UPI Pin ");
-        String pin = sc.next();
+
         System.out.print("Enter the Amount to be withdraw ");
         int withdraw = sc.nextInt();
+        if(withdraw < 500){
+            System.out.println("Can,t withdraw less than 500 Rs.");
+            Process.deposit();
+        }
         connection = DriverManager.getConnection(url, username, password);
         preparedStatement = connection.prepareStatement("SELECT * FROM bank WHERE Acc_Number = " + acc_Number);
         resultSet = preparedStatement.executeQuery();
-
+        System.out.print("Enter UPI Pin ");
+        String pin = sc.next();
         while (resultSet.next()) {
             if(!Objects.equals(resultSet.getString("Pin"), pin)){
                 System.out.println("Incorrect UPI Pin");
@@ -157,19 +162,24 @@ public class Process {
         while (resultSet.next()){
             System.out.println("The current amount is "+resultSet.getInt("Amount"));
         }
+        System.out.println("************* THANKS **************");
     }
-    public void deposit()  {
+    public static void deposit()  {
         try {
             System.out.print("Enter your Account Number ");
             String acc_Number = sc.next();
-            System.out.print("Enter UPI Pin ");
-            String pin = sc.next();
+
             System.out.print("Enter the amount to be deposited ");
             int amount = sc.nextInt();
+            if(amount < 500){
+                System.out.println("The minimum amount is 500");
+                Process.deposit();
+            }
             connection = DriverManager.getConnection(url, username, password);
             preparedStatement = connection.prepareStatement("SELECT * FROM bank WHERE Acc_Number = " + acc_Number);
             resultSet = preparedStatement.executeQuery();
-
+            System.out.print("Enter UPI Pin ");
+            String pin = sc.next();
             while (resultSet.next()) {
                 if(!Objects.equals(resultSet.getString("Pin"), pin)){
                     System.out.println("Incorrect UPI Pin");
@@ -194,6 +204,7 @@ public class Process {
         catch (Exception e){
             e.printStackTrace();
         }
+        System.out.println("************* THANKS **************");
     }
     public void checkBalance() throws SQLException {
         System.out.print("Enter your Account Number to be checked ");
@@ -209,6 +220,7 @@ public class Process {
             System.out.println("Account Type:-  " + resultSet.getString("Type"));
             System.out.println("Amount      :-  " + resultSet.getString("Amount"));
         }
+        System.out.println("************* THANKS **************");
     }
 
     public void closeAccount() throws SQLException {
@@ -219,6 +231,7 @@ public class Process {
         preparedStatement = connection.prepareStatement(SQLQuery);
         preparedStatement.executeUpdate();
         System.out.println("Account has been closed successfully ");
+        System.out.println("************* THANKS **************");
     }
 
     public static void changeUPIPin() throws SQLException {
@@ -249,8 +262,10 @@ public class Process {
         }
         preparedStatement = connection.prepareStatement("UPDATE bank SET Pin = "+newPin+" Where Acc_Number = "+acc_Number );
         int i = preparedStatement.executeUpdate();
+        System.out.println("************* THANKS **************");
         System.out.println("Your UPI Pin has been changed successfully");
         //System.out.println("New Pin is "+bank.getPIN());
+
 
     }
 }
