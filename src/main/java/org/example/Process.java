@@ -19,7 +19,7 @@ public class Process {
     private static PreparedStatement preparedStatement;
     private static ResultSet resultSet;
 
-    public void openAccount () throws SQLException {
+    public void openAccount() throws SQLException {
         try {
             Connection connection = DriverManager.getConnection(url, username, password);
             System.out.print("Enter Your Name ");
@@ -31,7 +31,7 @@ public class Process {
             System.out.print("Account No. ");
 
             String acc_Number = sc.next();
-            if(acc_Number.length() != 12){
+            if (acc_Number.length() != 12) {
                 System.out.println("Account Number Length must contain 12 digit");
                 Operation.operation();
             }
@@ -41,10 +41,10 @@ public class Process {
             bank.setPhone(phone);
             System.out.print("Enter Amount ");
             int amount = sc.nextInt();
-            if(amount >= 3500 ) {
-                preparedStatement = connection.prepareStatement("SELECT * FROM bank WHERE Phone = "+bank.getPhone());
+            if (amount >= 3500) {
+                preparedStatement = connection.prepareStatement("SELECT * FROM bank WHERE Phone = " + bank.getPhone());
                 resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()){
+                while (resultSet.next()) {
                     System.out.println("---------------------------------------------------------------------------------");
                     System.out.println("An Account is already exist withe Specified number......");
                     System.out.println("Try with another number");
@@ -52,8 +52,7 @@ public class Process {
                     Operation.operation();
                 }
                 bank.setBalance(amount);
-            }
-             else {
+            } else {
                 System.out.println();
                 System.out.println("*******************************************************************************************************");
                 System.out.println("The minimum amount to get the account opened is 3500");
@@ -67,7 +66,7 @@ public class Process {
             System.out.println("Enter four digit UPI Pin for security Purpose");
 
             String pin = sc.next();
-            if(pin.length() != 4){
+            if (pin.length() != 4) {
                 System.out.println("Pin length must be four");
                 Operation.operation();
             }
@@ -93,12 +92,9 @@ public class Process {
             System.out.println("Current Amount           :: " + bank.getBalance() + " Rs.");
             System.out.println();
             System.out.println("-------------------------------------------------------------------------------------------------");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
 
     }
@@ -115,6 +111,7 @@ public class Process {
         System.out.println("------------------------------------------------------------------------------------------");
 
     }
+
     public void withDraw() throws SQLException {
 
         System.out.print("Enter your Account Number ");
@@ -122,7 +119,7 @@ public class Process {
 
         System.out.print("Enter the Amount to be withdraw ");
         int withdraw = sc.nextInt();
-        if(withdraw < 500){
+        if (withdraw < 500) {
             System.out.println("Can,t withdraw less than 500 Rs.");
             Process.deposit();
         }
@@ -132,46 +129,46 @@ public class Process {
         System.out.print("Enter UPI Pin ");
         String pin = sc.next();
         while (resultSet.next()) {
-            if(!Objects.equals(resultSet.getString("Pin"), pin)){
+            if (!Objects.equals(resultSet.getString("Pin"), pin)) {
                 System.out.println("Incorrect UPI Pin");
                 Operation.operation();
             }
-            if (resultSet.getInt("Amount") > withdraw ) {
+            if (resultSet.getInt("Amount") > withdraw) {
 
                 int amount = (int) (resultSet.getInt("Amount") - withdraw);
-                if(amount >= 3500) {
+                if (amount >= 3500) {
                     connection = DriverManager.getConnection(url, username, password);
                     preparedStatement = connection.prepareStatement("UPDATE bank SET Amount = " + amount + " WHERE ACC_Number = " + acc_Number);
                     preparedStatement.executeUpdate();
                     System.out.println("Money withdraw successfully");
-                }
-                else {
+                } else {
                     connection = DriverManager.getConnection(url, username, password);
                     preparedStatement = connection.prepareStatement("SELECT * FROM bank WHERE Acc_Number = " + acc_Number);
                     resultSet = preparedStatement.executeQuery();
                     while (resultSet.next()) {
                         int amount1 = resultSet.getInt("Amount") - 3500;
                         System.out.println("Minimum Amount is required to run the account");
-                        System.out.println("You can withdraw only "+amount1);
+                        System.out.println("You can withdraw only " + amount1);
                     }
                 }
             }
         }
         preparedStatement = connection.prepareStatement("SELECT * FROM bank WHERE Acc_Number = " + acc_Number);
         resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()){
-            System.out.println("The current amount is "+resultSet.getInt("Amount"));
+        while (resultSet.next()) {
+            System.out.println("The current amount is " + resultSet.getInt("Amount"));
         }
         System.out.println("************* THANKS **************");
     }
-    public static void deposit()  {
+
+    public static void deposit() {
         try {
             System.out.print("Enter your Account Number ");
             String acc_Number = sc.next();
 
             System.out.print("Enter the amount to be deposited ");
             int amount = sc.nextInt();
-            if(amount < 500){
+            if (amount < 500) {
                 System.out.println("The minimum amount is 500");
                 Process.deposit();
             }
@@ -181,14 +178,14 @@ public class Process {
             System.out.print("Enter UPI Pin ");
             String pin = sc.next();
             while (resultSet.next()) {
-                if(!Objects.equals(resultSet.getString("Pin"), pin)){
+                if (!Objects.equals(resultSet.getString("Pin"), pin)) {
                     System.out.println("Incorrect UPI Pin");
                     Operation.operation();
                 }
-                    int crrAmount = resultSet.getInt("Amount") + amount;
-                    preparedStatement = connection.prepareStatement("UPDATE bank SET Amount = " + crrAmount + " WHERE Acc_Number = " + acc_Number);
-                    preparedStatement.executeUpdate();
-                    System.out.println("Money Deposited successful");
+                int crrAmount = resultSet.getInt("Amount") + amount;
+                preparedStatement = connection.prepareStatement("UPDATE bank SET Amount = " + crrAmount + " WHERE Acc_Number = " + acc_Number);
+                preparedStatement.executeUpdate();
+                System.out.println("Money Deposited successful");
 
                 //System.out.println("The current Amount is " + resultSet.getInt("Amount") );
 
@@ -196,21 +193,21 @@ public class Process {
 
             preparedStatement = connection.prepareStatement("SELECT * FROM bank WHERE Acc_Number = " + acc_Number);
             resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                System.out.println("The current amount is "+resultSet.getInt("Amount"));
+            while (resultSet.next()) {
+                System.out.println("The current amount is " + resultSet.getInt("Amount"));
             }
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("************* THANKS **************");
     }
+
     public void checkBalance() throws SQLException {
         System.out.print("Enter your Account Number to be checked ");
         String acc_Number = sc.next();
         Connection connection = DriverManager.getConnection(url, username, password);
-        String SQLQuery = "SELECT * FROM bank WHERE Acc_Number = "+acc_Number;
+        String SQLQuery = "SELECT * FROM bank WHERE Acc_Number = " + acc_Number;
         preparedStatement = connection.prepareStatement(SQLQuery);
         resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
@@ -227,7 +224,7 @@ public class Process {
         System.out.print("Enter your Account Number to be Deleted ");
         String acc_Number = sc.next();
         connection = DriverManager.getConnection(url, username, password);
-        String SQLQuery = "DELETE FROM bank WHERE Acc_Number = "+acc_Number;
+        String SQLQuery = "DELETE FROM bank WHERE Acc_Number = " + acc_Number;
         preparedStatement = connection.prepareStatement(SQLQuery);
         preparedStatement.executeUpdate();
         System.out.println("Account has been closed successfully ");
@@ -243,7 +240,7 @@ public class Process {
         preparedStatement = connection.prepareStatement("SELECT * FROM bank WHERE Acc_Number = " + acc_Number);
         resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
-            if(!Objects.equals(resultSet.getString("Pin"), pin)){
+            if (!Objects.equals(resultSet.getString("Pin"), pin)) {
                 System.out.println("Incorrect UPI Pin");
                 Operation.operation();
             }
@@ -251,16 +248,16 @@ public class Process {
         }
         System.out.print("Enter New UPI Pin ");
         String newPin = sc.next();
-        if(newPin.length() != 4){
+        if (newPin.length() != 4) {
             System.out.println("Warning :- Pin length must be 4");
             Process.changeUPIPin();
         }
         System.out.print("confirm Pin ");
-        if(!Objects.equals(newPin, sc.next())){
+        if (!Objects.equals(newPin, sc.next())) {
             System.out.println("Warning :- Pin is not matched");
             Process.changeUPIPin();
         }
-        preparedStatement = connection.prepareStatement("UPDATE bank SET Pin = "+newPin+" Where Acc_Number = "+acc_Number );
+        preparedStatement = connection.prepareStatement("UPDATE bank SET Pin = " + newPin + " Where Acc_Number = " + acc_Number);
         int i = preparedStatement.executeUpdate();
         System.out.println("************* THANKS **************");
         System.out.println("Your UPI Pin has been changed successfully");
@@ -269,3 +266,4 @@ public class Process {
 
     }
 }
+
